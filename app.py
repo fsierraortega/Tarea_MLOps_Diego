@@ -1,8 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-import uvicorn
 import pickle
-import numpy as np
 import pandas as pd
 import os
 
@@ -16,23 +14,27 @@ with open('scaler.pkl', 'rb') as archivo_scaler:
 # Definir las características esperadas
 columnas = ['Major_Axis_Length', 'Perimeter', 'Area', 'Convex_Area', 'Eccentricity']
 
+# Definir el modelo de datos de entrada usando Pydantic
+class CaracteristicasEntrada(BaseModel):
+    Major_Axis_Length: float
+    Perimeter: float
+    Area: int
+    Convex_Area: int
+    Eccentricity: float
+
 # Crear la aplicación FastAPI
 app = FastAPI(title="Clasificación de Granos de Arroz")
 
 @app.get("/")
 async def root():
-    return {"message":"Prediction"}
+    return {"message": "Prediction"}
 
 # Definir el endpoint para predicción
-@app.get("/prediccion/")
-async def model_predict(Major_Axis_Length: float,
-    Perimeter: float,
-    Area: int,
-    Convex_Area: int,
-    Eccentricity: float):
+@app.post("/prediccion/")
+async def model_predict(entrada: CaracteristicasEntrada):
     try:
         # Convertir la entrada en un DataFrame
-        datos_entrada = pd.DataFrame([[Major_Axis_Length,Perimeter,Area,Convex_Area,Eccentricity]], columns=columnas)
+        datos_entrada = pd.DataFrame([entrada.dict().values()], columns=columnas)
         
         # Escalar las características
         datos_entrada_scaled = scaler.transform(datos_entrada)
@@ -50,7 +52,3 @@ async def model_predict(Major_Axis_Length: float,
         return resultado
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
-
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 8000))
-    uvicorn.run("app.main:app", host="0.0.0.0", port=port)
