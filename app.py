@@ -4,6 +4,7 @@ import uvicorn
 import pickle
 import numpy as np
 import pandas as pd
+import os
 
 # Cargar el modelo y el scaler desde los archivos .pkl
 with open('modelo_arbol_decision.pkl', 'rb') as archivo_modelo:
@@ -50,9 +51,6 @@ async def model_predict(Major_Axis_Length: float,
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-
 if __name__ == "__main__":
-    import uvicorn
-    import os
     port = int(os.environ.get("PORT", 8000))
     uvicorn.run("app.main:app", host="0.0.0.0", port=port)
