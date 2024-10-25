@@ -2,12 +2,13 @@ catboost==1.2.7
 fastapi==0.79.1
 uvicorn==0.18.2
 pytest==7.1.2
-pylint==2.15.0
-os
-black==22.6.0
-pandas==2.2.2
+pylint ==2.15.0
+black == 22.6.0
+pandas == 2.2.2
 numpy==1.26.2
-pydantic==1.10.9
+uvicorn
+pydantic==1.6.2
+pydantic_core==2.14.5
 scikit-base==0.8.2
 scikit-fuzzy==0.4.2
 scikit-image==0.23.2
