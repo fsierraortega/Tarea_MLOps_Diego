@@ -27,7 +27,7 @@ app = FastAPI(title="Clasificación de Granos de Arroz")
 
 @app.get("/")
 async def root():
-    return {"message": "Prediction"}
+    return {"message": "Hola mundo"}
 
 # Definir el endpoint para predicción
 @app.post("/prediccion/")
